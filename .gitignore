@@ -1,2 +1,8 @@
 /__pycache__
+/pyparcels.egg-info
+/src/pyparcels.egg-info
 *.pyc
+*.whl
+*.gz
+*.whl
+.vscode/settings.json

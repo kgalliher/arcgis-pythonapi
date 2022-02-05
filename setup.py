@@ -15,9 +15,9 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
 
-    name='parcelfabric-pyapi-utils',  # Required
+    name='pyparcels',  # Required
 
-    version='1.0.0',  # Required
+    version='1.0.4',  # Required
 
     description='Helper functions for simplifying parcel fabric workflows with the ArcGIS Python API',  # Optional
 
@@ -61,13 +61,13 @@ setup(
 
     # When your source code is in a subdirectory under the project root, e.g.
     # `src/`, it is necessary to specify the `package_dir` argument.
-    package_dir={'': 'src'},  # Optional
+    # package_dir={'': 'pyparcels'},  # Optional
 
-    packages=find_packages(where='src'),  # Required
+    packages=find_packages(where='pyparcels'),  # Required
 
     python_requires='>=3.6, <4',
 
-    install_requires=['arcgis'],  # Optional
+    # install_requires=['arcgis'],  # Optional
 
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/kgalliher/arcgis-pythonapi/issues/',

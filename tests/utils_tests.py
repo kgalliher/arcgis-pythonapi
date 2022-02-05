@@ -1,12 +1,12 @@
 import json
 import os
 import unittest
+from unittest import TestLoader, TestSuite
 from arcgis import GIS
 from arcgis.features import FeatureLayer, FeatureLayerCollection, FeatureSet
-from pyapi_helpers.features import feature_utils as fu
-from pyapi_helpers.parcels import parcels_utils as pu
-from pyapi_helpers.versioning import versioning_utils as vu
-from pyapi_helpers.utils import test_order_log
+from pyparcels.features import feature_utils as fu
+from pyparcels.versioning import feature_utils as vu
+from pyparcels.parcels import feature_utils as pu
 
 
 class TestUtilsPackage(unittest.TestCase):
@@ -29,13 +29,16 @@ class TestUtilsPackage(unittest.TestCase):
         cls.gis = GIS(
             "https://server.domain.com/portal/", "user1", "pass.agp", verify_cert=False
         )
-        endpoints = ["FeatureServer", "ParcelFabricServer", "VersionManagementServer"]
-        cls.service_urls = {url: cls.base_server_url + url for url in endpoints}
+        endpoints = ["FeatureServer", "ParcelFabricServer",
+                     "VersionManagementServer"]
+        cls.service_urls = {
+            url: cls.base_server_url + url for url in endpoints}
         cls.parcel_fabric_flc = FeatureLayerCollection(
             cls.service_urls["FeatureServer"], cls.gis
         )
 
-        self.test_guid = "{4DAD729F-03FA-4D57-85B0-8DC120B7CBEA}" # some existing record guid
+        # some existing record guid
+        self.test_guid = "{4DAD729F-03FA-4D57-85B0-8DC120B7CBEA}"
 
         cls.vms = cls.parcel_fabric_flc.versions
         cls.records_service_url = f"{cls.service_urls['FeatureServer']}/1"
@@ -76,14 +79,16 @@ class TestUtilsPackage(unittest.TestCase):
         )
         print(features)
         self.assertIsNotNone(features, "Empty result")
-        self.assertIsInstance(features, FeatureSet, "Object is not a FeatureSet")
+        self.assertIsInstance(features, FeatureSet,
+                              "Object is not a FeatureSet")
 
     def test_create_parcel_record(self):
         record = pu.create_parcel_record(
             self.parcel_fabric_flc, version_name=self.version, record_name="Test123"
         )
         self.assertTrue(
-            record.get("addResults")[0].get("success"), "Record creation failed."
+            record.get("addResults")[0].get(
+                "success"), "Record creation failed."
         )
 
     def test_get_record_by_name(self):
@@ -94,29 +99,34 @@ class TestUtilsPackage(unittest.TestCase):
             gdb_version=self.version,
         )
         self.assertIsNotNone(record, "Empty result in Records query")
-        self.assertEqual(record[0].get("attributes").get("Name"), "SomeNewRecord")
+        self.assertEqual(record[0].get(
+            "attributes").get("Name"), "SomeNewRecord")
 
     def test_get_record_by_guid(self):
         record = pu.get_record_by_guid(
             self.gis, self.records_service_url, self.test_guid, gdb_version=self.version
         )
         self.assertIsNotNone(record, "Empty result in Records query")
-        self.assertEqual(record[0].get("attributes").get("Name"), "SomeNewRecord")
+        self.assertEqual(record[0].get(
+            "attributes").get("Name"), "SomeNewRecord")
 
     def test_get_all_layer_ids_from_flc(self):
         lyr_nt = fu.basic_lyr_info(self.parcel_fabric_flc)
         self.assertIsNotNone(lyr_nt)
-        self.assertTrue(len(lyr_nt) == 20, "Incorrect quantity of layer ID results")
+        self.assertTrue(len(lyr_nt) == 20,
+                        "Incorrect quantity of layer ID results")
 
     def test_get_single_ids_from_flc(self):
         lyr_nt = fu.basic_lyr_info(self.parcel_fabric_flc, "Tax")
         self.assertIsNotNone(lyr_nt)
         self.assertTrue(lyr_nt[0].lyr_name == "Tax")
-        self.assertTrue(len(lyr_nt) == 1, "Incorrect quantity of layer ID results")
+        self.assertTrue(len(lyr_nt) == 1,
+                        "Incorrect quantity of layer ID results")
 
     def test_layer_ids_to_json(self):
         try:
-            self.assertTrue(fu.feature_layer_ids_to_json(self.parcel_fabric_flc, self.out_file))
+            self.assertTrue(fu.feature_layer_ids_to_json(
+                self.parcel_fabric_flc, self.out_file))
             with open(self.out_file, "r") as layer_id_file:
                 layer_id_json = json.load(layer_id_file)
 
@@ -124,15 +134,24 @@ class TestUtilsPackage(unittest.TestCase):
             first_layer_id = first_layer_val.get("lyr_id")
             first_layer_name = first_layer_val.get("lyr_name")
 
-            self.assertTrue(first_layer_id == 0, f"Layer ID json: expected ID: 0, got {first_layer_id}")
+            self.assertTrue(
+                first_layer_id == 0, f"Layer ID json: expected ID: 0, got {first_layer_id}")
             self.assertTrue(
                 first_layer_name == "Pro_Parcel_Fabric_1A",
                 f"Layer ID json: expected ParcelFabric, got {first_layer_name}")
         finally:
             os.remove(self.out_file)
             json_file_exists = os.path.exists(self.out_file)
-            self.assertFalse(json_file_exists, "Did not remove the json layer id file")
+            self.assertFalse(json_file_exists,
+                             "Did not remove the json layer id file")
 
     @classmethod
     def tearDownClass(cls):
         vu.clean_up_versions(cls.vms)
+
+
+if __name__ == "__main__":
+
+    tests = TestLoader().discover("./tests", "test_*.py")
+    suite = TestSuite(tests)
+    runner = HTMLTestRunner(output=temp_dir)

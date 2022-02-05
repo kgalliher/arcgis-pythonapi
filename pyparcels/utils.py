@@ -10,7 +10,9 @@ from datetime import datetime
 
 import requests
 
-
+def get_version():
+    return "pyparcels: 1.0.4"
+    
 def timer(func):
     """Decorator: Print the runtime of the decorated function
 
