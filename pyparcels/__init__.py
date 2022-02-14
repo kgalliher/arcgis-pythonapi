@@ -1,3 +1,3 @@
-import features
-import versioning
-import parcels
+from pyparcels import features
+from pyparcels import versioning
+from pyparcels import parcels

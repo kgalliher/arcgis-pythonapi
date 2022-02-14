@@ -17,7 +17,7 @@ setup(
 
     name='pyparcels',  # Required
 
-    version='1.0.4',  # Required
+    version='1.0.0',  # Required
 
     description='Helper functions for simplifying parcel fabric workflows with the ArcGIS Python API',  # Optional
 
@@ -63,7 +63,8 @@ setup(
     # `src/`, it is necessary to specify the `package_dir` argument.
     # package_dir={'': 'pyparcels'},  # Optional
 
-    packages=find_packages(where='pyparcels'),  # Required
+    # packages=find_packages(where="pyparcels", include=["pyparcels.utils", "pyparcels.features", "pyparcels.parcels", "pyparcels.versioning"]),  # Required
+    packages=["pyparcels.utils", "pyparcels.features", "pyparcels.parcels", "pyparcels.versioning"],
 
     python_requires='>=3.6, <4',
 

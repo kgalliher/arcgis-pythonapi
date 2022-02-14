@@ -1,7 +1,7 @@
 import time
 import pandas as pd
 from arcgis.features import FeatureLayer, FeatureSet
-from pyapi_helpers.features import feature_utils
+from pyparcels.features import feature_utils
 
 
 def query_parcel_features(gis, parcel_list, where, fl_id, url, version):

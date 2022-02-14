@@ -5,9 +5,8 @@ from unittest import TestLoader, TestSuite
 from arcgis import GIS
 from arcgis.features import FeatureLayer, FeatureLayerCollection, FeatureSet
 from pyparcels.features import feature_utils as fu
-from pyparcels.versioning import feature_utils as vu
-from pyparcels.parcels import feature_utils as pu
-
+from pyparcels.parcels import parcels_utils as pu
+from pyparcels.versioning import versioning_utils as vu
 
 class TestUtilsPackage(unittest.TestCase):
     """Test the features, parcels and versioning utils in pyapi_helpers package"""
@@ -22,12 +21,11 @@ class TestUtilsPackage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        test_order_log("TestReassignToRecord")
         cls.base_server_url = (
-            "https://server.domain.com/server/rest/services/ParcelFabric/"
+            "https://krennic.esri.com/server/rest/services/HCAD_Subset/"
         )
         cls.gis = GIS(
-            "https://server.domain.com/portal/", "user1", "pass.agp", verify_cert=False
+            "https://krennic.esri.com/portal/", "admin", "esri.agp", verify_cert=False
         )
         endpoints = ["FeatureServer", "ParcelFabricServer",
                      "VersionManagementServer"]
@@ -38,12 +36,12 @@ class TestUtilsPackage(unittest.TestCase):
         )
 
         # some existing record guid
-        self.test_guid = "{4DAD729F-03FA-4D57-85B0-8DC120B7CBEA}"
+        cls.test_guid = "{4DAD729F-03FA-4D57-85B0-8DC120B7CBEA}"
 
         cls.vms = cls.parcel_fabric_flc.versions
         cls.records_service_url = f"{cls.service_urls['FeatureServer']}/1"
         cls.version = vu.create_version(cls.vms)
-        cls.out_file = "../result_out/layer_id.json"
+        cls.out_file = r"C:\temp\layer_id.json"
 
     def test_where_in_str(self):
         x = fu.generate_where_in_clause("name", ["a", "b", "c"])
