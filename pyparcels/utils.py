@@ -63,6 +63,11 @@ def dict_to_json_file(path, name, _dict):
 
 
 def check_arcpy_version() -> bool:
+    """Test for the successful import of arcpy module
+
+    Returns:
+        bool: [description]
+    """    
     try:
         import arcpy
         return True
