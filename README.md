@@ -1,9 +1,14 @@
 # Parcel Fabric Python API Utils
 ## Helper functions for simplifying parcel fabric workflows with the ArcGIS Python API
 
-** Install arcgis module **
+**Install arcgis module**
 
 `conda install -c esri arcgis`
+
+**Install [pyparcels](https://pypi.org/project/pyparcels/)**
+
+`pip install pyparcels`
+
 
 ### Utils
 - Basic functions to write json to a file, get a server token and a simple timer decorator
