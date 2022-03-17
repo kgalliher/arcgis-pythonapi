@@ -7,3 +7,4 @@
 *.gz
 *.whl
 .vscode/settings.json
+.vscode/launch.json

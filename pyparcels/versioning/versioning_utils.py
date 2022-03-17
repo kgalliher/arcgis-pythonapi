@@ -42,6 +42,9 @@ def get_version(vms, owner_name, version_name):
 def create_version(vms, version_name=None):
     """Create a new branch version
 
+    OBSOLETE: The ArcGIS API for Python (2.0.0) returns the full `versionInfo` dict
+    including the fully qualified name. Use `vms.create(version_name)["versionInfo"]`
+    
     Args:
       vms (arcgis.features._version.VersionManager): VersionManager object 
       version_name (str): (Optional) name of the version to be created
