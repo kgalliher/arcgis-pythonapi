@@ -61,6 +61,7 @@ def create_version(vms, version_name=None):
         return None
 
 def reconcile_version(version_name, future=False):
+  try:
     with vms.get(fq_version_name, "read") as version:
         version.mode = "edit"
         result = version.reconcile(
@@ -69,6 +70,11 @@ def reconcile_version(version_name, future=False):
             with_post=False,
             future=future,
         )
+    return result
+
+  except Exception as ex:
+    print(ex)
+    return None
 
 def purge_version_locks(vms, version=None):
     """Remove shared and exclusive locks from all branch versions
