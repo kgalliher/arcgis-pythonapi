@@ -23,7 +23,8 @@ arcgis-pythonapi
 
 
 1. Change the version number in setup.py
-2. Build, upload and install
+2. Remove any old files from /dist
+3. Build, upload and install
 	py -m build --wheel
 	twine upload dist/*
 	pip install pyparcels
