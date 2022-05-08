@@ -153,7 +153,7 @@ class TestUtilsPackage(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        vu.clean_up_versions(cls.vms)
+        vu.clean_up_versions(cls.vms, "api-")
 
 
 if __name__ == "__main__":

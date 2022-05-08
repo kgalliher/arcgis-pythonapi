@@ -1,21 +1,27 @@
 import time
 
 
-def clean_up_versions(vms):
+def clean_up_versions(vms, filter=None):
     """Delete all versions that match a search criteria.
 
     Args:
       vms (arcgis.features._version.VersionManager): VersionManager object 
+      filter (str): String to filter versions by name
 
     Returns:
       void
     """
     try:
         for version in vms.all:
-            if version.properties.versionName.startswith("ADMIN1.1pdsVersion") or \
-                    version.properties.versionName.lower().startswith("admin.api-"):
+          if ".default" not in version.properties.versionName.lower():
+            if filter:
+              if filter in version.properties.versionName.lower():
+                  version.delete()
+                  print(f"deleted version: {version.properties.versionName}")
+            else:
                 version.delete()
                 print(f"deleted version: {version.properties.versionName}")
+
     except Exception as ex:
         print("Error deleting version(s):", str(ex))
 
