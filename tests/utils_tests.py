@@ -89,6 +89,14 @@ class TestUtilsPackage(unittest.TestCase):
                 "success"), "Record creation failed."
         )
 
+    def test_reconcile_version(self):
+        record = pu.create_parcel_record(
+            self.parcel_fabric_flc, version_name=self.version, record_name="Test123"
+        )
+        res = vu.reconcile_version(self.vms, self.version, False)
+        self.assertIsNotNone(res, "Reconcile result is None")
+        self.assertTrue(res["success"], f"Reconcile failed: {res}")
+
     def test_get_record_by_name(self):
         record = pu.get_record_by_name(
             self.gis,

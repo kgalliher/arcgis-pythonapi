@@ -60,7 +60,7 @@ def create_version(vms, version_name=None):
         print(ex)
         return None
 
-def reconcile_version(version_name, future=False):
+def reconcile_version(vms, fq_version_name, future=False):
   try:
     with vms.get(fq_version_name, "read") as version:
         version.mode = "edit"
