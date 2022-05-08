@@ -5,7 +5,7 @@ from pyparcels.features import feature_utils
 
 
 def query_parcel_features(gis, parcel_list, where, fl_id, url, version):
-    """ Get a list of dicts containing the globalid and layer id of desired features
+    """Get a list of dicts containing the globalid and layer id of desired features
     by querying a FeatureLayer.  Extract the GlobalID value from each feature and
     build up the correct dict format.
 
@@ -33,12 +33,14 @@ def query_parcel_features(gis, parcel_list, where, fl_id, url, version):
             where += str(parcel_list[p]) + ","
         where = where[:-1] + ")"
     try:
-        tax_parcels = feature_utils.query_service(url=url,
-                                                  fl_id=fl_id,
-                                                  gis=gis,
-                                                  where=where,
-                                                  out_fields=["globalid"],
-                                                  version_name=version).to_dict()
+        tax_parcels = feature_utils.query_service(
+            url=url,
+            fl_id=fl_id,
+            gis=gis,
+            where=where,
+            out_fields=["globalid"],
+            version_name=version,
+        ).to_dict()
         # Create array of parcels to merge
         parcels_to_merge = []
         if "GlobalID" in tax_parcels["features"][0]["attributes"]:
@@ -48,10 +50,9 @@ def query_parcel_features(gis, parcel_list, where, fl_id, url, version):
         else:
             raise KeyError("Could not find a GlobalID/globalid column")
         for item in tax_parcels["features"]:
-            parcels_to_merge.append({
-                "id": item["attributes"][glob_id],
-                "layerId": fl_id
-            })
+            parcels_to_merge.append(
+                {"id": item["attributes"][glob_id], "layerId": fl_id}
+            )
     except Exception as ex:
         print(ex)
         return None
@@ -62,7 +63,7 @@ def create_parcel_record(flc, version_name, record_name="NewRecord001"):
     """Create a parcel record in the Records feature layer
 
     Args:
-      flc (arcgis.Features.FeatureLayerCollection): FLC of the parcel fabric 
+      flc (arcgis.Features.FeatureLayerCollection): FLC of the parcel fabric
       version_name: branch version
       record_name:  Name of the new record
                         (Default value = "NewRecord001")
@@ -71,16 +72,11 @@ def create_parcel_record(flc, version_name, record_name="NewRecord001"):
       Dict of edited features
     """
     # Record information with empty geometry.  The geometry is created during Build
-    record_dict = {"attributes": {
-        "name": record_name
-    },
-        "geometry": None
-    }
+    record_dict = {"attributes": {"name": record_name}, "geometry": None}
     records_fl = feature_utils.get_feature_layer(flc, "records")
 
     # Call edit_features method on the feature_layer object
-    new_record = records_fl.edit_features(
-        adds=[record_dict], gdb_version=version_name)
+    new_record = records_fl.edit_features(adds=[record_dict], gdb_version=version_name)
     return new_record
 
 
@@ -102,9 +98,7 @@ def get_record_by_name(gis, records_url, record_name, gdb_version, out_fields=No
     where = "name = '{}'".format(record_name)
     records_fl = FeatureLayer(records_url, gis)
     record_attributes = records_fl.query(
-        where=where,
-        gdb_version=gdb_version,
-        out_fields=out_fields
+        where=where, gdb_version=gdb_version, out_fields=out_fields
     ).to_dict()
     return record_attributes["features"]
 
@@ -131,10 +125,10 @@ def get_record_by_guid(gis, records_url, guid, gdb_version):
     return record_attributes["features"]
 
 
-def external_lines_to_parcels(path_to_lines: str,
-                              record_guid: str,
-                              cad_line_types: list) -> FeatureSet:
-    """ Generate valid parcel lines from a polyline feature class (.shp, fgdb, egdb, CAD)
+def external_lines_to_parcels(
+    path_to_lines: str, record_guid: str, cad_line_types: list
+) -> FeatureSet:
+    """Generate valid parcel lines from a polyline feature class (.shp, fgdb, egdb, CAD)
 
     Take in a feature class of lines, convert to SeDF for processing, return a FeatureSet
 

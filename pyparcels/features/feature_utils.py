@@ -29,12 +29,14 @@ def generate_where_in_clause(field_name, feature_list):
     return where_str
 
 
-def query_service(url, gis,  out_fields, version_name, fl_id=None, where="1=1", return_geom=False):
+def query_service(
+    url, gis, out_fields, version_name, fl_id=None, where="1=1", return_geom=False
+):
     """Returns a FeatureSet containing the features matching the query
 
     Args:
       url (str): URL of FeatureServer service to query
-      gis (GIS): GIS of feature service 
+      gis (GIS): GIS of feature service
       out_fields (list): list of fields t return
       version_name (str): branch version
       fl_id (int): (optional) LayerId of service
@@ -59,7 +61,7 @@ def get_feature_layer(flc: FeatureLayerCollection, lyr_name: str) -> FeatureLaye
     """Get a FeatureLayer out of a FeatureLayerCollection by its name property
 
     Args:
-      flc (arcgis.features.FeatureLayerCollection): The FeatureLayerCollection 
+      flc (arcgis.features.FeatureLayerCollection): The FeatureLayerCollection
       containing the desired FeatureLayer
 
       lyr_name (str): The name
@@ -67,33 +69,36 @@ def get_feature_layer(flc: FeatureLayerCollection, lyr_name: str) -> FeatureLaye
     Returns:
       arcgis.features.FeatureLayer
     """
-    fl_url = [n for n in flc.layers
-              if n.properties.name.lower() == lyr_name.lower()]
+    fl_url = [n for n in flc.layers if n.properties.name.lower() == lyr_name.lower()]
     fl = FeatureLayer(fl_url[0].url)
     return fl
 
 
-def basic_lyr_info(feature_layer_collection: FeatureLayerCollection, layer_name: str = None) -> List[namedtuple]:
+def basic_lyr_info(
+    feature_layer_collection: FeatureLayerCollection, layer_name: str = None
+) -> List[namedtuple]:
     """Get a list of namedtuples containing
-        - layer name
-        - layer collection order number as they appear in the collection
-        - the layer's layer ID
-        - the url to the feature layer
+    - layer name
+    - layer collection order number as they appear in the collection
+    - the layer's layer ID
+    - the url to the feature layer
 
-        Or:
-        A single named tuple described above for a specific layer
+    Or:
+    A single named tuple described above for a specific layer
 
-        Args:
-          feature_layer_collection (arcgis.features.FeatureLayerCollection): The FeatureLayerCollection
-          containing the desired FeatureLayer
+    Args:
+      feature_layer_collection (arcgis.features.FeatureLayerCollection): The FeatureLayerCollection
+      containing the desired FeatureLayer
 
-          layer_name (str): (optional) The name of a layer in the collection
+      layer_name (str): (optional) The name of a layer in the collection
 
-        Returns:
-          List[namedtuple]
+    Returns:
+      List[namedtuple]
     """
     layers = feature_layer_collection.layers
-    LayerProps = namedtuple("LayerProp", ["lyr_name", "lyr_list_order", "lyr_id", "lyr_url"])
+    LayerProps = namedtuple(
+        "LayerProp", ["lyr_name", "lyr_list_order", "lyr_id", "lyr_url"]
+    )
     layer_props = []
     for i, lyr in enumerate(layers):
         lp = LayerProps(lyr.properties.name, i, lyr.properties.id, lyr.url)
@@ -104,7 +109,9 @@ def basic_lyr_info(feature_layer_collection: FeatureLayerCollection, layer_name:
     return layer_props
 
 
-def feature_layer_ids_to_json(feature_layer_collection: FeatureLayerCollection, file_name: str) -> bool:
+def feature_layer_ids_to_json(
+    feature_layer_collection: FeatureLayerCollection, file_name: str
+) -> bool:
     layer_id_dict = basic_lyr_info(feature_layer_collection)
     layer_id_df = pd.DataFrame(data=layer_id_dict)
     try:

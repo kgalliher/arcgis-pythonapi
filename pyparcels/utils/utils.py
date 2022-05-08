@@ -10,25 +10,28 @@ from datetime import datetime
 
 import requests
 
+
 def get_version():
     return "pyparcels: 1.0.4"
-    
+
+
 def timer(func):
     """Decorator: Print the runtime of the decorated function
 
     Args:
-      func (function): The function to profile 
+      func (function): The function to profile
 
     Returns:
       The function wrapper
     """
+
     @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         """
 
         Args:
-          *args: 
-          **kwargs: 
+          *args:
+          **kwargs:
 
         Returns:
 
@@ -39,6 +42,7 @@ def timer(func):
         run_time = end_time - start_time
         print(f"Finished running {func.__name__!r} in {run_time:.4f} seconds.")
         return value
+
     return wrapper_timer
 
 
@@ -46,8 +50,8 @@ def dict_to_json_file(path, name, _dict):
     """Write a dict to a json file
 
     Args:
-      path (str): Output dir for new file 
-      name (str): Name of the new json file 
+      path (str): Output dir for new file
+      name (str): Name of the new json file
       _dict (dict): The dict to write to the file
 
     Returns:
@@ -66,9 +70,10 @@ def check_arcpy_version() -> bool:
     """Test for the successful import of arcpy module
     Returns:
         bool: [description]
-    """  
+    """
     try:
         import arcpy
+
         return True
     except ImportError:
         return False
@@ -78,15 +83,14 @@ def get_token(server_url, username, password):
     """Generate an ArcGIS Server token
 
     Args:
-      server_url (str): ArcGIS Server admin url 
-      username (str): 
-      password (str): 
+      server_url (str): ArcGIS Server admin url
+      username (str):
+      password (str):
 
     Returns:
       requests.Models.Response.content value
     """
-    my_obj = {'username': username,
-              "password": password, "client": "requestip"}
+    my_obj = {"username": username, "password": password, "client": "requestip"}
     x = requests.post(server_url, data=my_obj, verify=False)
     return x.content
 
@@ -117,10 +121,18 @@ class ServerLogProcessor:
     ====================     ====================================================================
 
     """
+
     strip_non_parcel = None
     out_file_path = None
 
-    def __init__(self, gis, out_file_path=None, clean_first=False, strip_non_parcel=False, log_level="INFO"):
+    def __init__(
+        self,
+        gis,
+        out_file_path=None,
+        clean_first=False,
+        strip_non_parcel=False,
+        log_level="INFO",
+    ):
         self.gis = gis
         self.out_file_path = out_file_path
         self.clean_first = clean_first
@@ -133,8 +145,7 @@ class ServerLogProcessor:
             self.server.logs.clean()
 
     def process_log_as_csv(self) -> bool:
-        logs = self.server.logs.query(
-            start_time=time.time(), level=self.log_level)
+        logs = self.server.logs.query(start_time=time.time(), level=self.log_level)
         try:
             df = self.process_log_as_dataframe()
 
@@ -146,8 +157,7 @@ class ServerLogProcessor:
             return False
 
     def process_log_as_dataframe(self) -> pd.DataFrame:
-        logs = self.server.logs.query(
-            start_time=time.time(), level=self.log_level)
+        logs = self.server.logs.query(start_time=time.time(), level=self.log_level)
 
         log_messages = logs.get("logMessages", [])
         if len(log_messages) == 0:
@@ -155,7 +165,7 @@ class ServerLogProcessor:
 
         df = pd.DataFrame.from_dict(log_messages)
         t = type(df)
-        df["date"] = pd.to_datetime(df['time'], unit='ms')
+        df["date"] = pd.to_datetime(df["time"], unit="ms")
         if self.strip_non_parcel:
             df.dropna(subset=["methodName"])
             df = df.loc[df.methodName.str.startswith("ParcelOperation::")]
@@ -166,8 +176,9 @@ class ServerLogProcessor:
         out_times = {}
 
         total_time_q = df.loc[
-            (df["message"].str.contains(parcel_operation)) &
-            (df["message"].str.contains("Total Time"))]
+            (df["message"].str.contains(parcel_operation))
+            & (df["message"].str.contains("Total Time"))
+        ]
         time_str = ":".join(total_time_q.iloc[0].message.split(":")[-3:])
 
         total_time = datetime.strptime(time_str, "%H:%M:%S.%f")
@@ -176,8 +187,7 @@ class ServerLogProcessor:
     def all_operations_total_time(self) -> Dict[str, datetime]:
         operation_times = {}
         df = self.process_log_as_dataframe()[["message", "methodName"]]
-        logged_operations = [o.split("::")[1]
-                             for o in df["methodName"].unique()]
+        logged_operations = [o.split("::")[1] for o in df["methodName"].unique()]
 
         for lo in logged_operations:
             operation = self.get_operation_total_time(lo)
