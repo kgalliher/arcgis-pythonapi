@@ -17,7 +17,7 @@ setup(
 
     name='pyparcels',  # Required
 
-    version='1.1.0',  # Required
+    version='1.2.0',  # Required
 
     description='Helper functions for simplifying parcel fabric workflows with the ArcGIS Python API',  # Optional
 

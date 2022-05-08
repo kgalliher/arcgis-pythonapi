@@ -1,0 +1,30 @@
+
+Troubleshooting:
+https://stackoverflow.com/questions/50585246/pip-install-creates-only-the-dist-info-not-the-package
+
+arcgis-pythonapi
+|
+--- pyparcels
+	|
+	--- __init__.py
+	--- utils.py
+	--- features
+		|
+		--- __init__.py
+		--- feature_utils.py
+	--- parcels
+		|
+		--- __init__.py 
+		--- parcels_utils.py
+	--- versioning
+		|
+		--- __init__.py
+		--- versioning_utils.py
+
+
+1. Change the version number in setup.py
+2. Build, upload and install
+	py -m build --wheel
+	twine upload dist/*
+	pip install pyparcels
+	pip show -f pyparcels
