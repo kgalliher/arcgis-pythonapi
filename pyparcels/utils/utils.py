@@ -95,9 +95,9 @@ def get_token(server_url, username, password):
     return x.content
 
 
-def test_order_log(name):
+def test_order_log(name, path=None):
     dt = datetime.now()
-    with open(r"E:\temp\test_order.txt", "a") as log:
+    with open(r"./test_order.txt", "a") as log:
         log.write(f"{name}:\t{str(dt)}\n")
 
 
