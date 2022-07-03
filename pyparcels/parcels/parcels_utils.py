@@ -9,7 +9,7 @@ def query_parcel_features(gis, parcel_list, where, fl_id, url, version):
     by querying a FeatureLayer.  Extract the GlobalID value from each feature and
     build up the correct dict format.
 
-    This format is used in all ParcelFabricServer functions that consume parcel polygons.
+    This format is used in all ParcelFabricServer functions that consume parcel features.
 
     ```
     [{"id": "{94A3C67D-46F0-4333-9757-8ED3F8E04600}","layerId": "10"},

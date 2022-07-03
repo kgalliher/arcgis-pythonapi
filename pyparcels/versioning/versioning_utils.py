@@ -47,7 +47,8 @@ def get_version(vms, owner_name, version_name):
 
 
 def create_version(vms, version_name=None):
-    """Create a new branch version
+    """Create a new branch version. If `version_name` is `None`, a version name will be generated
+    using a simple timestamp.
 
     Args:
       vms (arcgis.features._version.VersionManager): VersionManager object
@@ -59,7 +60,7 @@ def create_version(vms, version_name=None):
         timestamp = int(time.time())
         if not version_name:
             # VersionManagementServer - Create a new version
-            version_name = "api-{}".format(timestamp)
+            version_name = "pyparcels-{}".format(timestamp)
         else:
             version_name = f"{version_name}_{timestamp}"
         return vms.create(version_name)["versionInfo"]["versionName"]
@@ -78,6 +79,8 @@ def reconcile_version(vms, fq_version_name, future=False):
                 with_post=False,
                 future=future,
             )
+            if future:
+                result = result.result()
         return result
 
     except Exception as ex:

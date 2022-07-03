@@ -57,11 +57,11 @@ def query_service(
     )
 
 
-def get_feature_layer(flc: FeatureLayerCollection, lyr_name: str) -> FeatureLayer:
+def get_feature_layer(feature_layer_collection: FeatureLayerCollection, lyr_name: str) -> FeatureLayer:
     """Get a FeatureLayer out of a FeatureLayerCollection by its name property
 
     Args:
-      flc (arcgis.features.FeatureLayerCollection): The FeatureLayerCollection
+      feature_layer_collection (arcgis.features.FeatureLayerCollection): The FeatureLayerCollection
       containing the desired FeatureLayer
 
       lyr_name (str): The name
@@ -69,7 +69,7 @@ def get_feature_layer(flc: FeatureLayerCollection, lyr_name: str) -> FeatureLaye
     Returns:
       arcgis.features.FeatureLayer
     """
-    fl_url = [n for n in flc.layers if n.properties.name.lower() == lyr_name.lower()]
+    fl_url = [n for n in feature_layer_collection.layers if n.properties.name.lower() == lyr_name.lower()]
     fl = FeatureLayer(fl_url[0].url)
     return fl
 
