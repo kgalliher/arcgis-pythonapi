@@ -24,7 +24,7 @@ pipeline {
           sh """
           pip install -r requirements.txt
           py -m build --wheel
-	        twine upload dist/*
+	        twine upload dist/\*
           """
         }
       }
