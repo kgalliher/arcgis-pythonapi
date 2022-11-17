@@ -23,15 +23,8 @@ pipeline {
         script {
           sh """
           pip install -r requirements.txt
-          """
-        }
-      }
-    }
-    stage('Linting') { // Run pylint against your code
-      steps {
-        script {
-          sh """
-          pylint **/*.py
+          py -m build --wheel
+	        twine upload dist/*
           """
         }
       }
@@ -40,7 +33,7 @@ pipeline {
       steps {
         script {
           sh """
-          python -m unittest discover -s tests/unit
+          python -m unittest discover -s tests
           """
         }
       }
