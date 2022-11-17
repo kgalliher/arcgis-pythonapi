@@ -24,12 +24,6 @@ pipeline {
           sh """
           pip install -r requirements.txt
           """
-	  sh """
-	  py -m build --wheel
-	  """
-	  sh """
-	  twine upload dist/*
-	  """
         }
       }
     }
