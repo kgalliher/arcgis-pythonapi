@@ -23,9 +23,13 @@ pipeline {
         script {
           sh """
           pip install -r requirements.txt
-          py -m build --wheel
-	  twine upload dist
           """
+	  sh """
+	  py -m build --wheel
+	  """
+	  sh """
+	  twine upload dist/*
+	  """
         }
       }
     }
