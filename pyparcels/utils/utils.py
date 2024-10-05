@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Dict, List, Tuple
-
+from arcgis.gis import GIS
 import pandas as pd
 import tempfile
 import functools
@@ -65,6 +65,20 @@ def dict_to_json_file(path, name, _dict):
     with open(tmp, "w") as json_file:
         json_file.write(j)
 
+def get_server_admin_info(
+    portal_url: str, admin_username: str, admin_password: str
+) -> dict:
+    gis = GIS(
+        portal_url,
+        admin_username,
+        admin_password,
+        verify_cert=False,
+        trust_env=True,
+    )
+    return {
+        "enterpriseBuild": gis.properties["enterpriseBuild"],
+        "enterpriseVersion": gis.properties["enterpriseVersion"],
+    }
 
 def check_arcpy_version() -> bool:
     """Test for the successful import of arcpy module
