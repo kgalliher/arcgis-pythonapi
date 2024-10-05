@@ -65,7 +65,7 @@ def dict_to_json_file(path, name, _dict):
     with open(tmp, "w") as json_file:
         json_file.write(j)
 
-def get_server_admin_info(
+def get_enterprise_build_info(
     portal_url: str, admin_username: str, admin_password: str
 ) -> dict:
     gis = GIS(
