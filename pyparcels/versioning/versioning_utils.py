@@ -60,7 +60,7 @@ def create_version(vms, version_name=None):
         timestamp = int(time.time())
         if not version_name:
             # VersionManagementServer - Create a new version
-            version_name = "pyparcels-{}".format(timestamp)
+            version_name = "pyapi-{}".format(timestamp)
         else:
             version_name = f"{version_name}_{timestamp}"
         return vms.create(version_name)["versionInfo"]["versionName"]
