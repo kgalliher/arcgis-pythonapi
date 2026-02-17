@@ -7,7 +7,7 @@ from arcgis.features import FeatureLayer, FeatureLayerCollection, FeatureSet
 from pyparcels.features import feature_utils as fu
 from pyparcels.parcels import parcels_utils as pu
 from pyparcels.versioning import versioning_utils as vu
-
+from pyparcels.utils import utils
 class TestUtilsPackage(unittest.TestCase):
     """Test the features, parcels and versioning utils in pyapi_helpers package"""
 
