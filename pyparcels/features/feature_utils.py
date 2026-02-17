@@ -75,8 +75,8 @@ def get_feature_layer(feature_layer_collection: FeatureLayerCollection, lyr_name
 
 
 def basic_lyr_info(
-    feature_layer_collection: FeatureLayerCollection, layer_name: str = None
-) -> List[namedtuple]:
+    feature_layer_collection: FeatureLayerCollection, layer_name: str | None = None
+) -> list:
     """Get a list of namedtuples containing
     - layer name
     - layer collection order number as they appear in the collection
